@@ -1,61 +1,41 @@
 # Labor 08
 
+## Rajzolás QT-ben
+
+A [`QPainter`](https://doc.qt.io/qt-6/qpainter.html) erősen optimalizált funkciókat biztosít a legtöbb grafikus részlet megalkotásához. Mindent meg tud rajzolni az egyszerű grafikus primitívektől (amelyeket a [`QPoint`](https://doc.qt.io/qt-6/qpoint.html), [`QLine`](https://doc.qt.io/qt-6/qline.html), [`QRect`](https://doc.qt.io/qt-6/qrect.html), [`QRegion`](https://doc.qt.io/qt-6/qregion.html) és [`QPolygon`](https://doc.qt.io/qt-6/qpolygon.html) osztályok képviselnek) a bonyolult alakzatokig, például a vektor útvonalakig ([`QPainterPath`](https://doc.qt.io/qt-6/qpainterpath.html) osztály - lehetővé teszi a grafikus alakzatok elkészítését és újrafelhasználását).
+
+A vonalakat és körvonalakat a [`QPen`](https://doc.qt.io/qt-6/qpen.html) osztály segítségével rajzoljuk meg. A tollat stílusa (azaz vonaltípusa, _line_), szélessége (_width_), ecsetje/feje (_brush_), a végpontok rajzolása (_cap_) és két vonal közötti összekapcsolódás (_joint_) határozza meg. A toll ecsetje egy [`QBrush`](https://doc.qt.io/qt-6/qbrush.html) objektum, amelyet a tollal generált vonások kitöltésére használnak, vagyis a [`QBrush`](https://doc.qt.io/qt-6/qbrush.html) osztály határozza meg a kitöltési mintát.
+
+A [`QPainter`](https://doc.qt.io/qt-6/qpainter.html)-rel szöveget is rajzolhatunk ki. Szöveg rajzolásakor a betűtípust a [`QFont`](https://doc.qt.io/qt-6/qfont.html) osztály segítségével adjuk meg. A ténylegesen használt betűtípus attribútumait a [`QFontInfo`](https://doc.qt.io/qt-6/qfontinfo.html) osztály segítségével lehet lekérni. Ezenkívül a [`QFontMetrics`](https://doc.qt.io/qt-6/qfontmetrics.html) osztály biztosítja a betűméretet.
+
+Normális esetben a [`QPainter`](https://doc.qt.io/qt-6/qpainter.html) "természetes" koordinátarendszerbe rajzol, de képes transzformációkat végrehajtani [`QTransform`](https://doc.qt.io/qt-6/qtransform.html) osztály használatával.
+
+A színeket a [`QColor`](https://doc.qt.io/qt-6/qcolor.html) osztály képviseli, amely támogatja az RGB, HSV és CMYK színmodelleket. Támogatja az alfa-kevert körvonalazást és kitöltést is (áttetszőség elérése érdekében).
+
+Az elérhető kitöltési mintákat a [`Qt::BrushStyle`](https://doc.qt.io/qt-6/qt.html#BrushStyle-enum) enum írja le. Ide tartoznak az egyenletes színtől a nagyon ritka mintázatig terjedő alapminták, különféle vonalkombinációk, színátmenet kitöltések és textúrák. A Qt biztosítja a [`QGradient`](https://doc.qt.io/qt-6/qgradient.html) osztályt az egyéni színátmenet kitöltések meghatározásához, míg a textúramintákat a [`QPixmap`](https://doc.qt.io/qt-6/qpixmap.html) osztály segítségével határozzuk meg.
+
 ## Feladatok
-1. Írjunk egy szöveges fájlkereső alkalmazást, megy egy adott könyvtárban megkeresi az összes állományt és visszatéríti azokat melyek tartalmazzák a keresett karakterláncot. Ha a felhasználó nem specifikálja (üres) a keresési karakterláncot, térítsük vissza az összes
-állományt. Az állományok nevét és méretét jelenítsük meg tábálázat formájában.
-   - A könyvtár kiválasztásához használjuk [```QFileDialog```](https://doc.qt.io/qt-5/qfiledialog.html) osztályt illetve, a ```QDir::currentPath()``` függvényt az aktuális könyvtár lekéréséhez.
-   - A könyvtárak kezelésére, illetve a könyvtár struktúra bejárásához használjuk a beépített [```QDir```](https://doc.qt.io/qt-5/qdir.html) és [```QDirIterator```](https://doc.qt.io/qt-5/qdiriterator.html) osztályokat.
-   - A szöveges fájlok feldolgozásához, tartalmuk beolvasásához a [```QFile```](https://doc.qt.io/qt-5/qfile.html) és [```QTextStream```](https://doc.qt.io/qt-5/qtextstream.html) osztályokat használjuk. Mivel a fájlok feldolgozása sok időt vehet igénybe, a [```QProgressDialog```](https://doc.qt.io/qt-5/qprogressdialog.html) segítségével jelezzük a felhasználó felé, hány százalékát dolgoztuk fel a fájloknak, hol tartunk.
-   - A keresés eredményét egy [```QTableWidget```](https://doc.qt.io/qt-5/qtablewidget.html) objektum segítségével jelenítjük meg, a fájlokról információkat (pl. méret) a [```QFileInfo```](https://doc.qt.io/qt-5/qfileinfo.html) segítségével kérhetünk le.
-   - [Egy lehetséges megoldás, lépésről lépésre](http://doc.qt.io/qt-5/qtwidgets-dialogs-findfiles-example.html)
-      ![findfiles-example](https://user-images.githubusercontent.com/78269344/112871250-bf75eb80-90c7-11eb-98cb-ac22d026205e.png)
 
-2. Listázzuk ki egy könyvtárban hány futtatható alkalmazás (```application/x-executable```), illetve hány C/C++ forrásállomány található (```text/x-c++hdr, text/x-c++src, text/x-csrc```). A fájl típusát a [```QMimeType```](https://doc.qt.io/qt-5/qmimetype.html) segítségével tudjuk lekérdezni, a lehetséges [MIME típusok listája](https://mediatemple.net/community/products/dv/204403964/mimetypes)
+1. [`QPainter`](https://doc.qt.io/qt-6/qpainter.html) és [`QPen`](https://doc.qt.io/qt-6/qpen.html) segítségével, egy ablakra:
 
-3. Írjunk egy bináris képekben kereső alkalmazást, ahol a keresendő bájtsorozatot megadhatjuk hex vagy bináris kódolásban. Az adatok beolvasásához használjunk [```QDataStream```](https://doc.qt.io/qt-5/qdatastream.html)-et. A fájl típusát a [```QMimeType```](https://doc.qt.io/qt-5/qmimetype.html) segítségével tudjuk lekérdezni (```image/*```) .
+a. rajzoljuk ki az olimpiai játékok logóját:
 
-### Qt és MySql adatbázis összekötése --> [demó](https://github.com/szabolcscsaholczi/Qt_lab10_Database.git)
-* Hozzuk létre a tábláinkat/adatainkat a PhpMyAdmin segítségével.
-* Módosítsd a ```.pro``` fájlt:
-```c++
-         QT       += core gui sql
-```
-* Szükséges könyvtárak:
-```c++
-      #include <QtSql>
-      #include <QSqlDatabase>
-      #include <QSqlQuery>
-```
-* Összekötés: 
-```c++
-       QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    
-       db.setHostName("localhost");  
-       db.setUserName("root");       // az alapvető felhasználónév xamppban 
-       db.setPassword("");           // alapvetően nincs beállítva jelszó 
-       db.setDatabaseName("qt_database");
-       
-       if (db.open()) 
-       {
-           QMessageBox::information(this, "Kapcsolódás", "Kapcsolódás sikeres.");
-       }
-       else
-       {
-           QMessageBox::information(this, "Kapcsolódás", "Kapcsolódás sikertelen.");
-       }
-```
-* Lekérdezések:
-```c++
-         string userid;
+  <p align="center"> <img src="https://i.imgur.com/3pMX5fW.png" width=200px> </p>
+  b. rajzoljunk egy házat: 
+  <p align="center"> <img src="https://i.imgur.com/P1lG4ps.png" width=200px> </p>
 
-         QSqlQuery mySqlQuery;
-         mySqlQuery.exec("SELECT * FROM users");
+A pontok megtalálásához használhatjuk a repositoryban található **CursorTracker** projektet, amely futtatásakor az egerünk jelenlegi relatív pozícióját írja ki az alkalmazás ablakához viszonyítva. Bővebb információk, implementálási kérdések megtalálhatóak a projekt forráskódjában.
 
-         if (mySqlQuery.size() > 0) {
-             while (mySqlQuery.next()) {
-                 userid = mySqlQuery.value("id").toString().toUtf8().constData();
-                 username = mySqlQuery.value("name").toString().toUtf8().constData();
-             }
-         }
+2. Implementáljunk:
 
-```
+a. egy digitális órát:
+
+  <p align="center"> <img src="https://i.imgur.com/WdpQlf6.png" width=300px> </p>
+  b. egy analóg órát:       
+ <p align="center"> <img src="https://i.imgur.com/d7EHJba.png" width=300px> </p>
+
+3. Készítsünk egy mini Paint/Scribble alkalmazást, amelyben szabadon rajzolhatunk. Az alkalmazás adjon esélyt képeket betöltésére, a ceruzánk/ecsetünk méretének és színének megváltoztatására, vászonunk törlésére, majd pedig az elkészült képet lehessen elmenteni különböző formátumokba, illetve kinyomtatni. Ezen opciókat helyezzük menürendszerbe.
+Egy lehetséges megoldás megtalálható [itt](https://doc.qt.io/qt-6/qtwidgets-widgets-scribble-example.html).
+ <p align="center">
+ <img src="https://i.imgur.com/5R6rI3J.png" width=400px> 
+ </p>
